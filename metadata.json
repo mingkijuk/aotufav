@@ -1,0 +1,8 @@
+{
+  "name": "요철세계 최애표",
+  "description": "게임별 최애 캐릭터 모음표 생성기 - 다양한 게임의 최애 캐릭터를 자유롭게 조합하고 맞춤 테마와 함께 고화질 이미지로 저장할 수 있는 스튜디오.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
