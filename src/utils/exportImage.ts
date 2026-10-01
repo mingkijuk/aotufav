@@ -85,7 +85,7 @@ export function getResolutionForAspectRatio(
   const count = is3x3 ? 9 : totalSlots;
   const rows = Math.ceil(count / cols) || 3;
 
-  const cardH = is3x3 ? 538 : CARD_HEIGHT;
+  const cardH = is3x3 ? 562 : CARD_HEIGHT;
   const gap = is3x3 ? 24 : GRID_GAP;
   const gridHeight = (rows * cardH) + ((rows - 1) * gap);
   const totalBaseHeight =
@@ -207,12 +207,12 @@ export async function renderBoardToCanvas(
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
 
-  ctx.font = `900 ${56 * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
+  ctx.font = `900 ${(is3x3 ? 62 : 56) * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
   ctx.fillText('요철세계 파티별 최애표', paddingX, paddingTop);
 
   // Subtitle: "AOTU WORLD FAVORITES"
   ctx.fillStyle = mutedText;
-  ctx.font = `800 ${20 * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
+  ctx.font = `800 ${(is3x3 ? 24 : 20) * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
   ctx.fillText('AOTU WORLD FAVORITES', paddingX, paddingTop + (64 * scale));
 
   const plaqueH = 68 * scale;
@@ -327,8 +327,8 @@ export async function renderBoardToCanvas(
   const cardW = (width - (paddingX * 2) - (gap * (cols - 1))) / cols;
   const innerPad = (is3x3 ? 14 : CARD_INNER_PAD) * scale;
   const portraitSize = cardW - (innerPad * 2);
-  const headerBarH = (is3x3 ? 58 : GROUP_HEADER_H) * scale;
-  const footerH = (is3x3 ? 64 : NAME_FOOTER_H) * scale;
+  const headerBarH = (is3x3 ? 64 : GROUP_HEADER_H) * scale;
+  const footerH = (is3x3 ? 72 : NAME_FOOTER_H) * scale;
   const cardH = headerBarH + (10 * scale) + portraitSize + (10 * scale) + footerH;
 
   const gridStartY = sepY + (SEP_TO_GRID_GAP * scale);
@@ -362,7 +362,6 @@ export async function renderBoardToCanvas(
     ctx.strokeRect(cardX, cardY, cardW, cardH);
 
     // B. Group Header Bar
-    const headerBarH = GROUP_HEADER_H * scale;
     ctx.fillStyle = subBgColor;
     ctx.fillRect(cardX, cardY, cardW, headerBarH);
 
@@ -375,26 +374,26 @@ export async function renderBoardToCanvas(
     ctx.stroke();
 
     // Group Number Badge (e.g., "01", "02")
-    const numBadgeW = 34 * scale;
-    const numBadgeH = 28 * scale;
-    const numBadgeX = cardX + (10 * scale);
+    const numBadgeW = (is3x3 ? 46 : 34) * scale;
+    const numBadgeH = (is3x3 ? 36 : 28) * scale;
+    const numBadgeX = cardX + ((is3x3 ? 12 : 10) * scale);
     const numBadgeY = cardY + (headerBarH - numBadgeH) / 2;
 
     ctx.fillStyle = isSpace ? '#818cf8' : mainColor;
     ctx.fillRect(numBadgeX, numBadgeY, numBadgeW, numBadgeH);
 
     ctx.fillStyle = isSpace ? '#050510' : (isDark ? '#000000' : '#ffffff');
-    ctx.font = `900 ${16 * scale}px "Plus Jakarta Sans", monospace`;
+    ctx.font = `900 ${(is3x3 ? 22 : 16) * scale}px "Plus Jakarta Sans", monospace`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(String(i + 1).padStart(2, '0'), numBadgeX + (numBadgeW / 2), numBadgeY + (numBadgeH / 2));
 
     // Party Name: Big, bold, eye-catching
     ctx.fillStyle = mainColor;
-    ctx.font = `900 ${23 * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
+    ctx.font = `900 ${(is3x3 ? 31 : 23) * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(slot.gameName || '파티', numBadgeX + numBadgeW + (10 * scale), cardY + (headerBarH / 2));
+    ctx.fillText(slot.gameName || '파티', numBadgeX + numBadgeW + ((is3x3 ? 14 : 10) * scale), cardY + (headerBarH / 2));
 
     // C. Character Portrait (STRICTLY 1:1 SQUARE)
     const portraitX = cardX + innerPad;
@@ -440,14 +439,13 @@ export async function renderBoardToCanvas(
       ctx.fillStyle = isSpace ? '#818cf8' : mutedText;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = `900 ${(is3x3 ? 24 : 20) * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
+      ctx.font = `900 ${(is3x3 ? 34 : 20) * scale}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
       ctx.fillText(slot.characterName || '클릭 후 선택', portraitX + portraitSize / 2, portraitY + portraitSize / 2);
     }
     ctx.restore(); // End portrait clip
 
     // D. Character Name Footer (Large, Bold, Instantly Legible)
     const footerY = portraitY + portraitSize + (10 * scale);
-    const footerH = (is3x3 ? 64 : NAME_FOOTER_H) * scale;
 
     ctx.fillStyle = subBgColor;
     ctx.fillRect(cardX, footerY, cardW, footerH);
@@ -462,12 +460,12 @@ export async function renderBoardToCanvas(
     const charName = slot.characterName || '클릭 후 선택';
 
     // Scale font size dynamically if name is especially long
-    let nameFontSize = (is3x3 ? 30 : 26) * scale;
+    let nameFontSize = (is3x3 ? 36 : 26) * scale;
     ctx.font = `900 ${nameFontSize}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
     const measuredNameW = ctx.measureText(charName).width;
     const maxNameW = cardW - (18 * scale);
     if (measuredNameW > maxNameW) {
-      nameFontSize = Math.max((is3x3 ? 20 : 18) * scale, nameFontSize * (maxNameW / measuredNameW));
+      nameFontSize = Math.max((is3x3 ? 24 : 18) * scale, nameFontSize * (maxNameW / measuredNameW));
       ctx.font = `900 ${nameFontSize}px "Plus Jakarta Sans", "Noto Sans KR", sans-serif`;
     }
 

@@ -5,7 +5,6 @@ import {
   downloadBoardImage
 } from '../utils/exportImage';
 import { X, Download, Check, Loader2 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 interface ExportModalProps {
   slots: CardSlot[];
@@ -53,11 +52,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     setIsRendering(true);
     try {
       await downloadBoardImage(slots, config, 'png', 1.5);
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 3000);
     } catch (err) {
